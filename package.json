@@ -1,0 +1,19 @@
+{
+  "name": "cgm-simulator",
+  "version": "0.0.1",
+  "description": "A simple simulator",
+  "engines": {
+    "node": "8.9.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "pubnub": "^4.21.5"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}
