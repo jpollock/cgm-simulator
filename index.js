@@ -86,7 +86,7 @@ setInterval(function publishSampleMessage() {
         };
 
         pubnub.publish({
-            "channel": "cgm_simulator." + item,
+            "channel": item,
             "message": bg
         }, function(status, response) {
             console.log(status, response);
