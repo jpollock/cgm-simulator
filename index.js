@@ -25,7 +25,7 @@ var channel = readENV('PUBNUB_CHANNEL');
 function createNewSample(data) {
     var new_sample = []
     data.forEach(function(item) {
-        var rate = 1 + Math.floor(Math.random() * 10)/100;    
+        var rate = 1 + (getRandomInt(0, 75)/100);    
         new_sample.push( Math.floor(item * rate));
     });
     return new_sample;
