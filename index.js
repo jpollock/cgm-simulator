@@ -1,7 +1,15 @@
 "use strict";
 var PubNub = require('pubnub');
+var got = require('got');
 
 // load the jquery/kitchen-sink example to see the bot in action
+const join_time = 20000;
+const leave_time = 30000;
+const protocol = 'https'
+const host = 'ps.pndsn.com';
+//const host = 'balancer1g.bronze.aws-pdx-3.ps.pn';
+const subscribe_key = readENV('PUBNUB_SUBSCRIBE_KEY');
+//const subscribe_key = 'sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af';
 
 
 function readENV(varName, defaultValue) {
@@ -94,7 +102,7 @@ setInterval(function publishSampleMessage() {
             bg_p["time"] = 30;
 
         }
-        console.log(i[pos] + ' ' + i[pos + 5] + ' ' + (i[pos] -  i[pos + 5]));
+        //console.log(i[pos] + ' ' + i[pos + 5] + ' ' + (i[pos] -  i[pos + 5]));
         var bg = {
             //"value": Math.floor(bg_v * rate),
             "value": bg_v,
@@ -108,12 +116,181 @@ setInterval(function publishSampleMessage() {
             "channel": item,
             "message": bg
         }, function(status, response) {
-            console.log(status, response);
+            //console.log(status, response);
         })
         
     });    
 },300000);
 
+setInterval(function setState() {
+
+    var n= Date.now();
+    var b = new Date();
+    b.setUTCHours(0,0,0);
+
+    var slot = ((n - b) / 6e4)/5;
+    
+    var patients = [];
+    for (i = 0; i < total_patient_count; i++) {
+        patients.push('Patient' + (i+1))
+    }
+    patients.forEach(function(item, index, array) {
+        
+        var i = patient_bg_data_map[item];
+        
+        var pos = Math.floor(slot)
+        var bg_v = i[pos];
+        var rate = 1 + Math.floor(Math.random() * 5)/100;
+        var bg_p = { "amount": null, "time": null };
+
+        if (pos > i.length - 5) {
+            bg_p["amount"] = -(bg_v - i[5 -(i.length - pos)]);
+            bg_p["time"] = 30;
+        } else {
+            bg_p["amount"] = -(bg_v - i[pos + 5]);
+            bg_p["time"] = 30;
+
+        }
+        //console.log(i[pos] + ' ' + i[pos + 5] + ' ' + (i[pos] -  i[pos + 5]));
+        var bg = {
+            //"value": Math.floor(bg_v * rate),
+            "value": bg_v,
+			"timestamp": n,
+			//"prediction": bg_p,
+			"source": item,
+            "type": "bg",
+            "uuid": item
+        };
+
+        var newState = bg;
+
+        var array = JSON.stringify(bg);
+        bg = {
+            //"value": Math.floor(bg_v * rate),
+            "value": bg_v,
+			"timestamp": n,
+			//"prediction": bg_p,
+			"source": item,
+            "type": "bg",
+            "uuid": item
+        };
+
+
+        array = JSON.stringify(bg);
+/*        url = 'http://54.244.52.166/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/cgm_data_new/uuid/' + item + '/data?&uuid=blah&state=' + encodeURIComponent(array);        
+        //url = 'http://54.244.52.166/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/,/uuid/' + item + '/data?channel-group=group1&uuid=blah&state=' + encodeURIComponent(array);        
+        console.log(url)
+//'http://balancer1g.bronze.aws-pdx-3.ps.pn/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/foo/uuid/old/data?uuid=blah2&state=%7B%22age%22%3A+100%7D        
+        request(url, {
+            json: true
+            }, function (err, data) {
+            if (err) {
+                console.log(err)
+            } else {
+              console.log(data)
+            }
+            
+            // the JSON result
+            
+        })*/
+        var url = protocol + '://' + host + '/v2/presence/sub-key/' + subscribe_key + '/channel/'+item+'/uuid/' + item + '/data?&uuid=blah&state=' + encodeURIComponent(array);        
+        //url = 'http://54.244.52.166/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/,/uuid/' + item + '/data?channel-group=group1&uuid=blah&state=' + encodeURIComponent(array);        
+        //console.log(url)
+//'http://balancer1g.bronze.aws-pdx-3.ps.pn/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/foo/uuid/old/data?uuid=blah2&state=%7B%22age%22%3A+100%7D        
+        if (Math.floor(Math.random() * 50) > 25) {
+            got(url, {json: true}).then( response => {
+                //console.log(response.body);
+            }).catch(error => {
+                console.log(error.response.body);
+            });
+        }
+    });    
+},join_time);
+
+
+
+
+setInterval(function setState() {
+
+    var n= Date.now();
+    var b = new Date();
+    b.setUTCHours(0,0,0);
+
+    var slot = ((n - b) / 6e4)/5;
+    
+    var patients = [];
+    for (i = 0; i < total_patient_count; i++) {
+        patients.push('Patient' + (i+1))
+    }
+    patients.forEach(function(item, index, array) {
+        
+        var i = patient_bg_data_map[item];
+        
+        var pos = Math.floor(slot)
+        var bg_v = i[pos];
+        var rate = 1 + Math.floor(Math.random() * 5)/100;
+        var bg_p = { "amount": null, "time": null };
+
+        if (pos > i.length - 5) {
+            bg_p["amount"] = -(bg_v - i[5 -(i.length - pos)]);
+            bg_p["time"] = 30;
+        } else {
+            bg_p["amount"] = -(bg_v - i[pos + 5]);
+            bg_p["time"] = 30;
+
+        }
+        //console.log(i[pos] + ' ' + i[pos + 5] + ' ' + (i[pos] -  i[pos + 5]));
+        var bg = {
+            //"value": Math.floor(bg_v * rate),
+            "value": bg_v,
+			"timestamp": n,
+			//"prediction": bg_p,
+			"source": item,
+            "type": "bg",
+            "uuid": item
+        };
+
+        var newState = bg;
+/*
+        pubnub.setState({
+            state: newState,
+            channels: ['cgm_data']
+        }).then((response) => { 
+            console.log(response) 
+        }).catch((error) => { 
+            console.log(error)
+        });*/
+
+        var array = JSON.stringify(bg);
+        /*
+        var url = 'http://54.244.52.166/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/cgm_data/uuid/' + item + '/data?uuid=blah&state=' + encodeURIComponent(array);        
+        
+        console.log(url)
+        request(url, {
+            json: true
+            }, function (err, data) {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log(data)
+                }
+            })
+            */
+            if (Math.floor(Math.random() * 50) > 25) {
+                var url = protocol + '://' + host + '/v2/presence/sub-key/' + subscribe_key + '/channel/'+item+'/leave?uuid='+item;        
+                //console.log(url)
+                got(url, {json: true}).then( response => {
+                    //console.log(item + " >>> " + response.body);
+                }).catch(error => {
+                    console.log(error.response.body);
+                });
+
+        
+            }
+
+            
+    });    
+},leave_time);
 
 
 
