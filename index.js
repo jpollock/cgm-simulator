@@ -114,7 +114,8 @@ setInterval(function publishSampleMessage() {
 
         pubnub.publish({
             "channel": item,
-            "message": bg
+            "message": bg,
+            "meta": bg
         }, function(status, response) {
             //console.log(status, response);
         })
