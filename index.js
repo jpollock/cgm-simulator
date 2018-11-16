@@ -123,6 +123,7 @@ setInterval(function publishSampleMessage() {
     });    
 },300000);
 
+/*
 setInterval(function setState() {
 
     var n= Date.now();
@@ -194,6 +195,7 @@ setInterval(function setState() {
             // the JSON result
             
         })*/
+/*        
         var url = protocol + '://' + host + '/v2/presence/sub-key/' + subscribe_key + '/channel/'+item+'/uuid/' + item + '/data?&uuid=blah&state=' + encodeURIComponent(array);        
         //url = 'http://54.244.52.166/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/,/uuid/' + item + '/data?channel-group=group1&uuid=blah&state=' + encodeURIComponent(array);        
         //console.log(url)
@@ -208,9 +210,9 @@ setInterval(function setState() {
     });    
 },join_time);
 
+*/
 
-
-
+/*
 setInterval(function setState() {
 
     var n= Date.now();
@@ -261,7 +263,7 @@ setInterval(function setState() {
         }).catch((error) => { 
             console.log(error)
         });*/
-
+/*
         var array = JSON.stringify(bg);
         /*
         var url = 'http://54.244.52.166/v2/presence/sub-key/sub-c-cbb4a31e-7b26-11e8-8d30-2e062084a6af/channel/cgm_data/uuid/' + item + '/data?uuid=blah&state=' + encodeURIComponent(array);        
@@ -277,6 +279,7 @@ setInterval(function setState() {
                 }
             })
             */
+            /*
             if (Math.floor(Math.random() * 50) > 25) {
                 var url = protocol + '://' + host + '/v2/presence/sub-key/' + subscribe_key + '/channel/'+item+'/leave?uuid='+item;        
                 //console.log(url)
@@ -292,7 +295,7 @@ setInterval(function setState() {
             
     });    
 },leave_time);
-
+*/
 
 
 const express = require('express')
