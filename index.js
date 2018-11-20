@@ -121,7 +121,7 @@ setInterval(function publishSampleMessage() {
         })
         
     });    
-},300000);
+},readENV('MESSAGE_SEND_TIME'));
 
 /*
 setInterval(function setState() {
